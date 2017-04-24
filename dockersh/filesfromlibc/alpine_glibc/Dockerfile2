@@ -1,0 +1,13 @@
+FROM alpine:3.5
+MAINTAINER clz <changlizhi@aliyun.com>
+ENV GLIBC_PKG_VERSION=2.25-r0
+WORKDIR /app
+RUN \
+	apk add --update openssl curl wget && \
+	apk add bash  && \
+	wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://github.com/changlizhi/dockerfilelost/blob/master/sgerrand.rsa.pub && \
+	wget  https://github.com/changlizhi/dockerfilelost/blob/master/glibc-${GLIBC_PKG_VERSION}.apk && \
+	wget  https://github.com/changlizhi/dockerfilelost/blob/master/glibc-bin-${GLIBC_PKG_VERSION}.apk && \
+	wget  https://github.com/changlizhi/dockerfilelost/blob/master/glibc-i18n-${GLIBC_PKG_VERSION}.apk && \
+    echo 'Y'| apk add glibc-${GLIBC_PKG_VERSION}.apk glibc-bin-${GLIBC_PKG_VERSION}.apk glibc-i18n-${GLIBC_PKG_VERSION}.apk /usr/glibc-compat/bin/localedef -i en_US -f UTF-8 en_US.UTF-8
+CMD ["/bin/bash"]
