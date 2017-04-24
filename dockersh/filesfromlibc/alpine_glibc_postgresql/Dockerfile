@@ -5,7 +5,7 @@ WORKDIR /app
 RUN echo 'http://mirrors.ustc.edu.cn/alpine/v3.5/main'>>/etc/apk/repositories && apk update
 RUN \
 	apk add --update openssl \
-	&& apk add bash git \
+	&& apk add bash git postgresql \
 	&& wget -q -O /etc/apk/keys/sgerrand.rsa.pub http://192.168.2.100:8080/dockerfilelost/sgerrand.rsa.pub \
 	&& wget  http://192.168.2.100:8080/dockerfilelost/glibc-${GLIBC_PKG_VERSION}.apk \
 	&& wget  http://192.168.2.100:8080/dockerfilelost/glibc-bin-${GLIBC_PKG_VERSION}.apk \

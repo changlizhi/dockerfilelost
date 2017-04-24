@@ -2,10 +2,10 @@ FROM alpine:3.5
 MAINTAINER clz <changlizhi@aliyun.com>
 ENV GLIBC_PKG_VERSION=2.25-r0
 WORKDIR /app
-RUN echo 'http://mirrors.ustc.edu.cn/alpine/v3.5/main'>/etc/apk/repositories && apk update
+RUN echo 'http://mirrors.ustc.edu.cn/alpine/v3.5/main'>>/etc/apk/repositories && apk update
 RUN \
 	apk add --update openssl \
-	&& apk add nodejs \
+	&& apk add nodejs git\
 	&& npm install -g npm \
 	&& npm install -g webpack \
 	&& npm install -g bower \
