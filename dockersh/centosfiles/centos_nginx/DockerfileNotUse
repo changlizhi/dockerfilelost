@@ -1,0 +1,12 @@
+FROM centos:7
+MAINTAINER clz <changlizhi@aliyun.com>
+WORKDIR /app
+ENV NGINX_VERSION=1.12.0
+RUN echo 'root:root'|chpasswd\
+	&& cd ${WORKDIR} \
+	&& yum -y install wget \
+	&& wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz \
+	&& tar -zxvf nginx-${NGINX_VERSION}.tar.gz \
+	&& mv nginx-${NGINX_VERSION} nginx \
+	&& mv nginx /usr/local/
+CMD ["/usr/local/nginx/sbin/gingx"]

@@ -1,0 +1,28 @@
+FROM centos:7
+MAINTAINER clz <changlizhi@aliyun.com>
+WORKDIR /app
+ENV REDIS_VERSION=3.2.8
+ENV SERVICE_PATH=/etc/systemd/system
+ENV SERVICE_NAME=redis_6379.service
+RUN echo 'root:root'|chpasswd\
+	&& yum -y install wget make gcc \
+	&& cd $WORKDIR \
+	&& wget http://download.redis.io/releases/redis-${REDIS_VERSION}.tar.gz \
+	&& tar zxvf redis-${REDIS_VERSION}.tar.gz \
+	&& mv redis-${REDIS_VERSION} redis \
+	&& cd redis \
+	&& make \
+	&& make install \
+	&& cd utils \
+	&& sh ./install_server.sh \
+	&& rm -rf ${WORKDIR}/redis \
+	&& rm -f ${WORKDIR}/redis-${REDIS_VERSION}.tar.gz
+RUN touch /${SERVICE_PATH}/${SERVICE_NAME} \
+	&& echo '[Unit]'>>/${SERVICE_PATH}/${SERVICE_NAME} \
+	&& echo 'Description=Redis on port 6379'>>/${SERVICE_PATH}/${SERVICE_NAME} \
+	&& echo '[Service]'>>/${SERVICE_PATH}/${SERVICE_NAME} \
+	&& echo 'Type=forking'>>/${SERVICE_PATH}/${SERVICE_NAME} \
+	&& echo 'ExecStart=/etc/init.d/redis_6379 start'>>/${SERVICE_PATH}/${SERVICE_NAME} \
+	&& echo 'ExecStop=/etc/init.d/redis_6379 stop'>>/${SERVICE_PATH}/${SERVICE_NAME} \
+	&& echo 'WantedBy=multi-user.target'>>/${SERVICE_PATH}/${SERVICE_NAME} \
+
